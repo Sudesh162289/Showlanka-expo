@@ -1,56 +1,46 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, StatusBar, ActivityIndicator, TouchableOpacity, FlatList, Image, Alert } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  StatusBar,
+  ActivityIndicator,
+  TouchableOpacity,
+  FlatList,
+  Image,
+  Alert,
+  Animated,
+} from 'react-native';
 
 const events = [
-  {
-    id: '1',
-    title: 'Vesak Festival',
-    date: 'April 24, 2024',
-    time: '7:00 PM',
-    location: 'Colombo',
-    image: 'https://i.imgur.com/0XJY1eE.png',
-  },
-  {
-    id: '2',
-    title: 'DJ Night',
-    date: 'April 27, 2024',
-    time: '9:00 PM',
-    location: 'Kandy',
-    image: 'https://i.imgur.com/7EwKcLC.png',
-  },
-  {
-    id: '3',
-    title: 'Traditional Music Concert',
-    date: 'May 2, 2024',
-    time: '6:30 PM',
-    location: 'Galle',
-    image: 'https://i.imgur.com/8nUeWkZ.png',
-  },
-  {
-    id: '4',
-    title: 'Live Band',
-    date: 'May 5, 2024',
-    time: '8:00 PM',
-    location: 'Negombo',
-    image: 'https://i.imgur.com/3g7nmJC.png',
-  },
+  { id: '1', title: 'Vesak Festival', date: 'April 24, 2024', time: '7:00 PM', location: 'Colombo', image: 'https://i.imgur.com/0XJY1eE.png' },
+  { id: '2', title: 'DJ Night', date: 'April 27, 2024', time: '9:00 PM', location: 'Kandy', image: 'https://i.imgur.com/7EwKcLC.png' },
+  { id: '3', title: 'Traditional Music Concert', date: 'May 2, 2024', time: '6:30 PM', location: 'Galle', image: 'https://i.imgur.com/8nUeWkZ.png' },
+  { id: '4', title: 'Live Band', date: 'May 5, 2024', time: '8:00 PM', location: 'Negombo', image: 'https://i.imgur.com/3g7nmJC.png' },
 ];
 
 export default function App() {
   const [loading, setLoading] = useState(true);
+  const fadeAnim = new Animated.Value(0);
 
   useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 2000,
+      useNativeDriver: true,
+    }).start();
+
     const timer = setTimeout(() => setLoading(false), 2000);
     return () => clearTimeout(timer);
   }, []);
 
   if (loading) {
     return (
-      <View style={styles.splashContainer}>
+      <Animated.View style={[styles.splashContainer, { opacity: fadeAnim }]}>
         <StatusBar barStyle="light-content" backgroundColor="#6200EE" />
         <Text style={styles.splashText}>ShowLanka 🎉</Text>
         <ActivityIndicator size="large" color="#fff" />
-      </View>
+      </Animated.View>
     );
   }
 
@@ -130,6 +120,11 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     overflow: 'hidden',
     marginBottom: 15,
+    elevation: 4, // Android shadow
+    shadowColor: '#000', // iOS shadow
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
   },
   cardImage: {
     width: '100%',
